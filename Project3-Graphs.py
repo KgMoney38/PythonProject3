@@ -40,3 +40,15 @@ UNDIRECTED_PROBLEM1_EDGES: List[tuple[str,str]] = [
     ('M','N'),
     ('N','O')
 ]
+
+#Helper to create a dictionary of sets adjacency so that i dont have to change the sample code Dr. Hu provided
+def build_undirected_adj(edges: Iterable[tuple[str,str]]) -> Dict[str, Set[str]]:
+
+#Helper to repeat BFS for unvisited nodes to list all of our connected components
+def components_via_bfs(G: Dict[str, Set[str]]) -> List[List[str]]:
+
+#Same as function above just with DFS instead
+def components_via_dfs(G: Dict[str, Set[str]]) -> List[List[str]]:
+
+
+def main():
