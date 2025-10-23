@@ -58,8 +58,8 @@ def components_via_bfs(G: Dict[str, Set[str]]) -> List[List[str]]:
             continue
         order= bfs.bfs(G, v)
         component= sorted(set(order))
-        components.append(components)
-        seen.update(components)
+        components.append(component)
+        seen.update(component)
     return components
 
 #Same as function above just with DFS instead
@@ -78,4 +78,35 @@ def components_via_dfs(G: Dict[str, Set[str]]) -> List[List[str]]:
 
 def main():
 
+    G=build_undirected_adj(UNDIRECTED_PROBLEM1_EDGES)
+    if not G:
+        print("No undirected edges found")
+        return
+
+    nodes= sorted(G.keys())
+    s, t = nodes[0], nodes[-1]
+
+    print("Nodes:", nodes)
+    print("Edges:", sorted(tuple(sorted(e)) for e in UNDIRECTED_PROBLEM1_EDGES))
+
+    #First Components
+    print("Part a:")
+    print("BFS components:", components_via_bfs(G))
+    print("DFS components:", components_via_dfs(G))
+
+    #Second the path
+    print(f"\nPart b: Path exists between {s} to {t}.")
+    bfs_p= bfs_path.bfs_path(G,s,t)
+    print("Reach it?", bfs_p is not None)
+
+    #Third BFS vs. DFS paths
+    print(f"\nPart c: BFS vs DFS path from {s} to {t} ")
+    if bfs_p is not None:
+        print("BFS path (least edges):", bfs_p)
+        print("DFS path (one discovered):", dfspath.dfs_path(G,s,t))
+    else:
+        print(f"No path between {s} and {t}.")
+
+if __name__ == "__main__":
+    main()
 
