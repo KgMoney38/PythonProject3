@@ -9,13 +9,13 @@ import argparse
 #Problem 1- Kody Graham
 #Using bfs, bfs_path, dfs_path, and dfs_iterative from Dr. Hu's online classroom on blackboard
 
-#P1 Imports
+#P1 Imports all from Dr. Hu's example code
 import bfs
 import bfs_path
 import dfs_path as dfspath
 import dfs_iterative as dfsit
 
-#GLOBAL DONT CHANGE!!!!
+#For my helpers to build a dict of sets so i can call Dr. Hu's sample code without modifying it
 UNDIRECTED_PROBLEM1_EDGES: List[tuple[str,str]] = [
 
     #
@@ -44,9 +44,9 @@ UNDIRECTED_PROBLEM1_EDGES: List[tuple[str,str]] = [
 #Helper to create a dictionary of sets adjacency so that i dont have to change the sample code Dr. Hu provided
 def build_undirected_adj(edges: Iterable[tuple[str,str]]) -> Dict[str, Set[str]]:
     G: Dict[str, Set[str]] = {}
-    for u, edge in edges:
-        G.setdefault(u, set()).add(edge)
-        G.setdefault(edge, set()).add(u)
+    for u, v in edges:
+        G.setdefault(u, set()).add(v)
+        G.setdefault(v, set()).add(u)
     return G
 
 #Helper to repeat BFS for unvisited nodes to list all of our connected components
@@ -60,16 +60,16 @@ def components_via_bfs(G: Dict[str, Set[str]]) -> List[List[str]]:
         component= sorted(set(order))
         components.append(component)
         seen.update(component)
-    return components
+    return components #Each component as a sorted vertices list
 
 #Same as function above just with DFS instead
 def components_via_dfs(G: Dict[str, Set[str]]) -> List[List[str]]:
     seen: Set[str] = set()
     comps: List[List[str]] = []
-    for v in sorted(G.keys()):
+    for v in sorted(G.keys()): #Determine the outer order
         if v in seen:
             continue
-        visited = dfsit._dfs(G,v)
+        visited = dfsit._dfs(G,v) #Iterative dfs traverse from sample
         comp = sorted(set(visited))
         comps.append(comp)
         seen.update(comp)
@@ -77,7 +77,7 @@ def components_via_dfs(G: Dict[str, Set[str]]) -> List[List[str]]:
 
 
 def main():
-
+    #Build adjacency and protect against having an empty graph
     G=build_undirected_adj(UNDIRECTED_PROBLEM1_EDGES)
     if not G:
         print("No undirected edges found")
@@ -86,15 +86,16 @@ def main():
     nodes= sorted(G.keys())
     s, t = nodes[0], nodes[-1]
 
+    #Just added these to give me an easy copy of the graph used for use in our report
     print("Nodes:", nodes)
     print("Edges:", sorted(tuple(sorted(e)) for e in UNDIRECTED_PROBLEM1_EDGES))
 
-    #First Components
-    print("Part a:")
+    #First Components using both BFS and DFS obviously independently
+    print("\nPart a: Connected Components")
     print("BFS components:", components_via_bfs(G))
     print("DFS components:", components_via_dfs(G))
 
-    #Second the path
+    #Second check for the path for both BFS and DFS
     print(f"\nPart b: Path exists between {s} to {t}.")
     bfs_p= bfs_path.bfs_path(G,s,t)
     print("Reach it?", bfs_p is not None)
